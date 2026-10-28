@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sổ chi tiêu</title>
+  <meta name="description" content="Ghi lại thu chi hằng ngày, xem tổng kết theo tháng và theo danh mục. Dữ liệu chỉ lưu trên trình duyệt của bạn.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💰</text></svg>">
+  <link rel="stylesheet" href="css/style.css">
+  <script>
+    // Đặt giao diện sáng/tối đã chọn TRƯỚC khi trang hiện ra, để không bị nháy màu.
+    try {
+      const giaoDien = localStorage.getItem('so-chi-tieu:giao-dien');
+      if (giaoDien === 'sang' || giaoDien === 'toi') document.documentElement.dataset.theme = giaoDien;
+    } catch {
+      // Trình duyệt chặn localStorage: dùng giao diện theo hệ điều hành.
+    }
+  </script>
+  <script type="module" src="js/main.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#noi-dung">Bỏ qua, tới nội dung chính</a>
+
+  <header class="header">
+    <div class="khung header__trong">
+      <h1 class="logo">💰 Sổ chi tiêu</h1>
+      <button id="nut-giao-dien" class="nut nut--phu" type="button">
+        <span aria-hidden="true">🌓</span> Giao diện: <span id="ten-giao-dien">Tự động</span>
+      </button>
+    </div>
+  </header>
+
+  <main id="noi-dung" class="khung bo-cuc" tabindex="-1">
+    <section class="the vung-them" aria-labelledby="tieu-de-them">
+      <h2 id="tieu-de-them">Thêm giao dịch</h2>
+      <form id="form-giao-dich" class="form" novalidate>
+        <fieldset class="chon-loai">
+          <legend>Loại</legend>
+          <label><input type="radio" name="loai" value="chi" checked> Khoản chi</label>
+          <label><input type="radio" name="loai" value="thu"> Khoản thu</label>
+        </fieldset>
+
+        <div class="o-nhap">
+          <label for="mo-ta">Mô tả</label>
+          <input id="mo-ta" name="moTa" maxlength="80" autocomplete="off" placeholder="vd: Cà phê với bạn">
+          <p id="mo-ta-loi" class="loi" hidden></p>
+        </div>
+
+        <div class="o-nhap">
+          <label for="so-tien">Số tiền (₫)</label>
+          <input id="so-tien" name="soTien" inputmode="numeric" autocomplete="off" placeholder="vd: 45000">
+          <p id="so-tien-loi" class="loi" hidden></p>
+        </div>
+
+        <div class="hang-doi">
+          <div class="o-nhap">
+            <label for="danh-muc">Danh mục</label>
+            <select id="danh-muc" name="danhMuc"></select>
+          </div>
+          <div class="o-nhap">
+            <label for="ngay">Ngày</label>
+            <input id="ngay" name="ngay" type="date">
+          </div>
+        </div>
+
+        <button class="nut nut--chinh" type="submit">+ Thêm giao dịch</button>
+      </form>
+    </section>
+
+    <section class="the vung-tong-ket" aria-labelledby="tieu-de-tong-ket">
+      <div class="dau-muc">
+        <h2 id="tieu-de-tong-ket">Tổng kết tháng</h2>
+        <label class="chon-thang">
+          <span class="visually-hidden">Chọn tháng</span>
+          <input id="thang" type="month">
+        </label>
+      </div>
+      <dl class="so-lieu">
+        <div class="so-lieu__o so-lieu__o--thu"><dt>Tổng thu</dt><dd id="tong-thu">0 ₫</dd></div>
+        <div class="so-lieu__o so-lieu__o--chi"><dt>Tổng chi</dt><dd id="tong-chi">0 ₫</dd></div>
+        <div class="so-lieu__o"><dt>Còn lại</dt><dd id="so-du">0 ₫</dd></div>
+      </dl>
+
+      <h3>Chi tiêu theo danh mục</h3>
+      <ul id="bieu-do" class="bieu-do"></ul>
+      <p id="bieu-do-trong" class="trong" hidden>Tháng này chưa có khoản chi nào.</p>
+    </section>
+
+    <section class="the vung-danh-sach" aria-labelledby="tieu-de-danh-sach">
+      <div class="dau-muc">
+        <h2 id="tieu-de-danh-sach" tabindex="-1">Giao dịch</h2>
+        <span id="so-giao-dich" class="nhan"></span>
+      </div>
+      <div class="bo-loc">
+        <label>
+          <span class="visually-hidden">Lọc theo loại</span>
+          <select id="loc-loai">
+            <option value="tat-ca">Tất cả</option>
+            <option value="chi">Khoản chi</option>
+            <option value="thu">Khoản thu</option>
+          </select>
+        </label>
+        <label class="o-tim">
+          <span class="visually-hidden">Tìm theo mô tả</span>
+          <input id="tim-kiem" type="search" placeholder="Tìm theo mô tả..." autocomplete="off">
+        </label>
+      </div>
+      <ul id="danh-sach" class="danh-sach"></ul>
+      <p id="danh-sach-trong" class="trong" hidden></p>
+    </section>
+
+    <section class="the vung-du-lieu" aria-labelledby="tieu-de-du-lieu">
+      <h2 id="tieu-de-du-lieu">Dữ liệu</h2>
+      <p class="ghi-chu">Dữ liệu chỉ lưu trên trình duyệt này. Hãy xuất ra tệp để sao lưu hoặc chuyển sang máy khác.</p>
+      <div class="nhom-nut">
+        <button id="nut-mau" class="nut nut--phu" type="button" hidden>✨ Thêm dữ liệu mẫu</button>
+        <button id="nut-xuat" class="nut nut--phu" type="button">⤓ Xuất tệp JSON</button>
+        <button id="nut-nhap" class="nut nut--phu" type="button">⤒ Nhập từ tệp</button>
+        <input id="tep-nhap" type="file" accept="application/json,.json" hidden>
+      </div>
+    </section>
+  </main>
+
+  <div id="thong-bao" class="thong-bao" role="status" aria-live="polite" hidden>
+    <span id="thong-bao-chu"></span>
+    <button id="nut-hoan-tac" class="nut nut--nho" type="button" hidden>Hoàn tác</button>
+  </div>
+
+  <template id="mau-giao-dich">
+    <li class="giao-dich">
+      <span class="giao-dich__bieu-tuong" aria-hidden="true"></span>
+      <div class="giao-dich__noi-dung">
+        <p class="giao-dich__mo-ta"></p>
+        <p class="giao-dich__phu"></p>
+      </div>
+      <p class="giao-dich__so-tien"></p>
+      <button class="giao-dich__xoa" type="button">✕</button>
+    </li>
+  </template>
+</body>
+</html>

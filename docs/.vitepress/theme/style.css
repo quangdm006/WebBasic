@@ -1,0 +1,153 @@
+/* Màu thương hiệu: cam HTML + màu riêng cho từng phần học (HTML cam, CSS tím, JS vàng...) */
+:root {
+  --vp-c-brand-1: #c2410c;
+  --vp-c-brand-2: #d9480f;
+  --vp-c-brand-3: #ea580c;
+  --vp-c-brand-soft: rgba(234, 88, 12, 0.14);
+  /* Nút dùng màu đậm hơn để chữ trắng đủ tương phản (≥ 4.5:1) */
+  --vp-button-brand-bg: #c2410c;
+  --vp-button-brand-hover-bg: #9a3412;
+  --vp-button-brand-active-bg: #7c2d12;
+
+  --wb-c-accent: #7c3aed;
+  --wb-c-html: #c2410c;
+  --wb-c-html-soft: rgba(234, 88, 12, 0.14);
+  --wb-c-css: #6d28d9;
+  --wb-c-css-soft: rgba(124, 58, 237, 0.13);
+  --wb-c-js: #a16207;
+  --wb-c-js-soft: rgba(234, 179, 8, 0.18);
+  --wb-c-adv: #0f766e;
+  --wb-c-adv-soft: rgba(20, 184, 166, 0.14);
+  --wb-c-proj: #be185d;
+  --wb-c-proj-soft: rgba(219, 39, 119, 0.12);
+  --wb-editor-selection: rgba(234, 88, 12, 0.2);
+
+  --vp-home-hero-name-color: transparent;
+  --vp-home-hero-name-background: linear-gradient(120deg, #ea580c 15%, #7c3aed 85%);
+  --vp-home-hero-image-background-image: linear-gradient(-45deg, #f97316 50%, #8b5cf6 50%);
+  --vp-home-hero-image-filter: blur(56px);
+}
+
+.dark {
+  --vp-c-brand-1: #fdba74;
+  --vp-c-brand-2: #fb923c;
+  --vp-c-brand-3: #ea580c;
+  --vp-c-brand-soft: rgba(251, 146, 60, 0.16);
+  --vp-button-brand-bg: #c2410c;
+  --vp-button-brand-hover-bg: #9a3412;
+  --vp-button-brand-active-bg: #7c2d12;
+
+  --wb-c-accent: #a78bfa;
+  --wb-c-html: #fdba74;
+  --wb-c-html-soft: rgba(251, 146, 60, 0.16);
+  --wb-c-css: #c4b5fd;
+  --wb-c-css-soft: rgba(167, 139, 250, 0.16);
+  --wb-c-js: #fde047;
+  --wb-c-js-soft: rgba(250, 204, 21, 0.14);
+  --wb-c-adv: #5eead4;
+  --wb-c-adv-soft: rgba(45, 212, 191, 0.14);
+  --wb-c-proj: #f9a8d4;
+  --wb-c-proj-soft: rgba(244, 114, 182, 0.15);
+  --wb-editor-selection: rgba(251, 146, 60, 0.25);
+}
+
+@media (min-width: 640px) {
+  :root {
+    --vp-home-hero-image-filter: blur(64px);
+  }
+}
+
+/* Dấu ✓ cho bài đã học trong sidebar (gắn bởi SidebarProgress.vue) */
+.VPSidebar a.VPLink[data-done]::after {
+  content: '✓';
+  flex: none;
+  margin-left: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--vp-c-green-1);
+}
+
+/* Bảng trong bài học: chữ nhỏ hơn một chút */
+.vp-doc table {
+  font-size: 14px;
+}
+
+/* Bảng thuật ngữ / cheat sheet: cột đầu (cú pháp) không xuống dòng */
+.vp-doc td:first-child code {
+  white-space: nowrap;
+}
+
+/* Khối code + kết quả chạy thử (```html live, ```js run — plugin trong .vitepress/markdown.ts) */
+.vp-doc .live-block {
+  margin: 16px 0;
+}
+.vp-doc .live-block > div[class*='language-'] {
+  margin: 0;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+@media (max-width: 639px) {
+  .vp-doc .live-block {
+    margin: 16px -24px;
+  }
+  .vp-doc .live-block .live-demo {
+    border-left: 0;
+    border-right: 0;
+    border-radius: 0;
+  }
+}
+
+/* Nút "Mở bản chạy thử" của dự án cuối khóa */
+.vp-doc a.nut-demo {
+  display: inline-block;
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--vp-button-brand-text);
+  background: var(--vp-button-brand-bg);
+  transition: background-color 0.2s;
+}
+.vp-doc a.nut-demo:hover {
+  background: var(--vp-button-brand-hover-bg);
+}
+
+/* Checklist "- [ ] ..." (plugin taskLists trong .vitepress/markdown.ts) */
+.vp-doc ul.contains-task-list {
+  padding-left: 0;
+}
+.vp-doc li.task-list-item {
+  position: relative;
+  list-style: none;
+  padding-left: 28px;
+}
+.vp-doc .task-label {
+  cursor: pointer;
+}
+.vp-doc .task-checkbox {
+  position: absolute;
+  left: 2px;
+  top: 6px;
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  accent-color: var(--vp-c-brand-3);
+  cursor: pointer;
+}
+
+/* Ghi chú dưới Code Playground (trang layout: page không có khung bài viết) */
+.pg-notes {
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 8px 24px 64px;
+}
+@media (max-width: 640px) {
+  .pg-notes {
+    padding: 8px 16px 48px;
+  }
+}
+
+/* Khoảng cách tiêu đề trong bài học dài */
+.vp-doc h2 {
+  scroll-margin-top: 80px;
+}
